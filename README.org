@@ -1,0 +1,9 @@
+#+TITLE: Dogs
+
+A OCaml implementation of a subset of the functional Scala library [[https://typelevel.org/cats/][Cats]]
+
+* Building
+
+#+BEGIN_SRC bash
+$ dune build
+#+END_SRC
