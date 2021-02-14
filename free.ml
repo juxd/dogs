@@ -1,26 +1,6 @@
 open Base
 
-module type Basic = sig
-  type 'a t
-end
-
-module Transformation = struct
-  module type S = sig
-    type 'a s
-    type 'a t
-
-    val transform : 'a s -> 'a t
-  end
-
-  module type S2 = sig
-    type 'a s
-    type ('a, 'r) t
-
-    val transform : 'a s -> ('a, _) t
-  end
-end
-
-module Make (F : Basic) = struct
+module Make (F : Free_intf.Basic) = struct
   module T = struct
     type _ t =
       | Return : 'a -> 'a t
@@ -40,13 +20,15 @@ module Make (F : Basic) = struct
     ;;
   end
 
+  type 'a f = 'a F.t
+
   include T
   include (Monad.Make (T) : Monad.S with type 'a t := 'a t)
 
-  module With_transformation_to_monad = struct
+  module To_monad = struct
     module Arity1
         (M : Monad.S)
-        (T : Transformation.S with type 'a s = 'a F.t and type 'a t = 'a M.t) =
+        (T : Free_intf.Transformation.S with type 'a s = 'a f and type 'a t = 'a M.t) =
     struct
       let rec fold_m = function
         | Return a -> M.return a
@@ -59,7 +41,9 @@ module Make (F : Basic) = struct
 
     module Arity2
         (M : Monad.S2)
-        (T : Transformation.S2 with type 'a s = 'a F.t and type ('a, 'r) t = ('a, 'r) M.t) =
+        (T : Free_intf.Transformation.S2
+               with type 'a s = 'a f
+                and type ('a, 'r) t = ('a, 'r) M.t) =
     struct
       let rec fold_m = function
         | Return a -> M.return a

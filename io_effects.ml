@@ -20,7 +20,7 @@ module Io_free = struct
     ;;
   end
 
-  module To_cont = With_transformation_to_monad.Arity2 (Cont) (Cont_transformation)
+  module To_cont = To_monad.Arity2 (Cont) (Cont_transformation)
 
   let%test_module "test cont" =
     (module struct
