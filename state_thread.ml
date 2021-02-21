@@ -8,23 +8,30 @@ module T = struct
   let bind t ~f s = f (t s) s
 end
 
-type ('a, 's) t = ('a, 's) T.t
-
+include T
 include (Monad.Make2 (T) : Monad.S2 with type ('a, 's) t := ('a, 's) t)
 
 type 'a final_state = { f : 's. ('a, 's) t }
 
 let run { f } = f ()
 
-let%expect_test "check that normal thunks can compile" =
-  run { f = (fun s -> return 3 s) } |> Stdio.printf "%d\n";
-  [%expect{| 3 |}];
-  let chained_monad x y =
-    let open Let_syntax in
-    let%bind x = return x in
-    let%map y = return y in
-    Printf.sprintf "%d + %d = %d" x y (x + y)
-  in
-  run { f = (fun s -> chained_monad 1 2 s) } |> Stdio.print_endline;
-  [%expect{| 1 + 2 = 3 |}]
-;;
+module Local_ref :
+  State_thread_intf.Local_ref.S with type ('a, 's) st_monad := ('a, 's) t = struct
+  type ('a, 's) t = 'a ref [@@deriving sexp_of]
+
+  let create a = return (ref a)
+  let read t = return !t
+  let write t a = return (t := a)
+end
+
+module Local_array :
+  State_thread_intf.Local_array.S with type ('a, 's) st_monad := ('a, 's) t = struct
+  type ('a, 's) t = 'a Array.t [@@deriving sexp_of]
+
+  let of_list l = return (Array.of_list l)
+  let size t = return (Array.length t)
+  let get t i = return t.(i)
+  let set t i a = return (t.(i) <- a)
+  let swap t i j = return (Array.swap t i j)
+  let to_list t = return (Array.to_list t)
+end
