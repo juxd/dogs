@@ -1,9 +1,34 @@
 #+TITLE: Dogs
 
-A OCaml implementation of a subset of the functional Scala library [[https://typelevel.org/cats/][Cats]]
+An OCaml implementation of some functional data abstractions.
+
+* Documentation & examples
+
+Currently ongoing. Documentation should be found in:
+1. ~.mli~ files of the accompanying data structures
+2. in the [[./examples/][examples folder]], which also act as tests.
+
+* What's with the name?
+
+Initially my plan was to replicate the functional Scala library [[https://typelevel.org/cats/][Cats]]. However,
+after looking into what this library comprises, I found that:
+
+1. Most /data classes/ are already implemented (in [[https://opensource.janestreet.com/base/][Base]] or [[https://github.com/MattWindsor91/travesty/][Travesty]], which this
+   library builds on top of).
+2. Most /data types/ are pretty narrow in use, such that it's probably easier
+   and more performant to just hand-write your own implementations in OCaml
+   (E.g. take a look at Kleisli compositions, validations and writers).
+
+So this repo has deviated in design, and became more of OCaml implementations of
+cool things I learnt while going through FP in Scala with my friends.
 
 * Building
 
-#+BEGIN_SRC bash
+#+BEGIN_SRC console
 $ dune build
+$ dune runtest
 #+END_SRC
+
+* Installing
+
+Soon(TM)
