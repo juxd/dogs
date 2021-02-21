@@ -2,6 +2,15 @@ open Base
 open Dogs
 open State_thread
 
+(* Note for readers: it may be a bit confusing that everything is {i
+   eta-expanded}. In short, this is the only way I could figure out to keep weak
+   polymorphism out of the monads, so the "for all" type quantifier in type ['a
+   State_thread.finalised] can type-check when it's supposed to. For more info,
+   check out:
+
+   {{:https://caml.inria.fr/pub/docs/manual-ocaml/polymorphism.html} Chapter 5
+   of OCaml Manual} *)
+
 let%expect_test "check that normal t's can compile" =
   run { f = (fun s -> return 3 s) } |> Stdio.printf "%d\n";
   [%expect {| 3 |}];
