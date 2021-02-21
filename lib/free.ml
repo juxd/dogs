@@ -28,7 +28,7 @@ module Make (F : T1) = struct
   module To_monad = struct
     module Arity1
         (M : Monad.S)
-        (T : Free_intf.Transformation.S with type 'a s := 'a f and type 'a t := 'a M.t) =
+        (T : Free_intf.Transformation.S with type 'a s = 'a f and type 'a t = 'a M.t) =
     struct
       let rec fold_m = function
         | Return a -> M.return a
@@ -42,8 +42,8 @@ module Make (F : T1) = struct
     module Arity2
         (M : Monad.S2)
         (T : Free_intf.Transformation.S2
-               with type 'a s := 'a f
-                and type ('a, 'r) t := ('a, 'r) M.t) =
+               with type 'a s = 'a f
+                and type ('a, 'r) t = ('a, 'r) M.t) =
     struct
       let rec fold_m = function
         | Return a -> M.return a

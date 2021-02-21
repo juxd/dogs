@@ -1,3 +1,6 @@
+(* See comments in the [.ml] file to understand what these interfaces mean. *)
+open Dogs
+
 module T : sig
   type _ t =
     | Read_line : string option t

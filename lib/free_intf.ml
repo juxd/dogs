@@ -28,14 +28,14 @@ module type S = sig
   module To_monad : sig
     module Arity1 : functor
       (M : Monad.S)
-      (T : Transformation.S with type 'a s := 'a f and type 'a t := 'a M.t)
+      (T : Transformation.S with type 'a s = 'a f and type 'a t = 'a M.t)
       -> sig
       val fold_m : 'a t -> 'a M.t
     end
 
     module Arity2 : functor
       (M : Monad.S2)
-      (T : Transformation.S2 with type 'a s := 'a f and type ('a, 'r) t := ('a, 'r) M.t)
+      (T : Transformation.S2 with type 'a s = 'a f and type ('a, 'r) t = ('a, 'r) M.t)
       -> sig
       val fold_m : 'a t -> ('a, _) M.t
     end

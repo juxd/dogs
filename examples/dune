@@ -1,0 +1,6 @@
+(library
+ (name        dogs_tests)
+ (libraries   base travesty dogs)
+ (inline_tests)
+ (preprocess (pps ppx_jane))
+ (synopsis "tests for dogs"))

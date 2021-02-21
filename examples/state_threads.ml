@@ -1,4 +1,5 @@
 open Base
+open Dogs
 open State_thread
 
 let%expect_test "check that normal t's can compile" =

@@ -1,6 +1,6 @@
 (library
- (name        data_classes)
+ (name        dogs)
  (libraries   base travesty)
  (inline_tests)
  (preprocess (pps ppx_jane))
- (synopsis ""))
+ (synopsis "more functional data abstractions"))

@@ -17,8 +17,7 @@ type 'a finalised = { f : 's. ('a, 's) t }
 
 let run { f } = f ()
 
-module Local_ref :
-  State_thread_intf.Local_ref.S with type ('a, 's) st_monad := ('a, 's) t = struct
+module Local_ref = struct
   type ('a, 's) t = 'a ref [@@deriving sexp_of]
 
   let create a = return (ref a)
@@ -26,8 +25,7 @@ module Local_ref :
   let write t a = return (t := a)
 end
 
-module Local_array :
-  State_thread_intf.Local_array.S with type ('a, 's) st_monad := ('a, 's) t = struct
+module Local_array = struct
   type ('a, 's) t = 'a Array.t [@@deriving sexp_of]
 
   let of_list l = return (Array.of_list l)
