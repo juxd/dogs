@@ -11,8 +11,20 @@ let%expect_test "check that normal t's can compile" =
     Printf.sprintf "%d + %d = %d" x y (x + y)
   in
   run { f = (fun s -> chained_monad 1 2 s) } |> Stdio.print_endline;
-  [%expect {| 1 + 2 = 3 |}]
+  [%expect {| 1 + 2 = 3 |}];
+  let three s = return 3 s in
+  (* named states work as expected *)
+  run { f = (fun s -> three s) } |> Stdio.printf "%d\n";
+  [%expect {| 3 |}];
+  run { f = (fun s -> (three >>= return >>= return) s) } |> Stdio.printf "%d\n";
+  [%expect {| 3 |}]
 ;;
+
+(* The following monads are not created by our monad and hence should not compile. *)
+(* let%expect_test "these should not compile" =
+ *   let _ = run { f = (fun s -> s + 1) } in
+ *   run { f = (fun _s -> 1) } |> Stdio.printf "%d\n";
+ *   [%expect {| 1 |}] *)
 
 let%expect_test "check that t's made with local ref or array work properly" =
   (* We need to eta-expand these operations to prevent weak polymorphism. *)

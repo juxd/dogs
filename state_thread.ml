@@ -1,7 +1,9 @@
 open Base
 
+type 'a result = 'a
+
 module T = struct
-  type ('a, 's) t = 's -> 'a
+  type ('a, 's) t = 's -> 'a result
 
   let return a _s = a
   let map = `Custom (fun t ~f s -> f (t s))
@@ -11,7 +13,7 @@ end
 include T
 include (Monad.Make2 (T) : Monad.S2 with type ('a, 's) t := ('a, 's) t)
 
-type 'a final_state = { f : 's. ('a, 's) t }
+type 'a finalised = { f : 's. ('a, 's) t }
 
 let run { f } = f ()
 
