@@ -6,8 +6,8 @@ open Dogs
 (** {1 Defining the DSL}
 
     We first define a DSL to represent actions we would take. This action should
-   be of type ['a t], which means that they should translatable to a monad
-   implementation of type ['a Monad_implementation.t] *)
+    be of type ['a t], which means that they should translatable to a monad
+    implementation of type ['a Monad_implementation.t] *)
 module T = struct
   type _ t =
     | Read_line : string option t
@@ -15,7 +15,7 @@ module T = struct
 end
 
 (** [String_buffers.t] is but one of a possible monad we can transform DSL (of
-   [T.t]) into. We will see how this translation is created in module [Free]. *)
+    [T.t]) into. We will see how this translation is created in module [Free]. *)
 module String_buffers = struct
   module T = struct
     type t =
@@ -36,14 +36,14 @@ module Free = struct
   (** {2 Making a Free monad}
 
       After defining the DSL, we make its Free monad using [Free.Make]. This
-     will provide us with functors that convert the created monad into a given
-     monad implementation. *)
+      will provide us with functors that convert the created monad into a given
+      monad implementation. *)
   include Free.Make (T)
 
   (** {3 Defining a transformation}
 
       This is module implements the transformation from the DSL type to a Cont
-     monad. *)
+      monad. *)
   module Cont_transformation = struct
     type 'a s = 'a f
     type ('a, 'r) t = ('a, 'r) Cont.t
@@ -57,8 +57,8 @@ module Free = struct
   (** {4 Creating a converter to a cont}
 
       With the previously implemented transformation, we can use the
-     [To_monad.Arity] functors to create a converter from a Free monad of our IO
-     DSL into a [Cont.t] *)
+      [To_monad.Arity] functors to create a converter from a Free monad of our IO
+      DSL into a [Cont.t] *)
   module To_cont = To_monad.Arity2 (Cont) (Cont_transformation)
 
   module String_buffers_state_transformation = struct
@@ -72,10 +72,13 @@ module Free = struct
     ;;
   end
 
+  (** {5 Another example with our custom monad}
+
+      This is an example of how we can use the free monad to implement testable
+      input and outputs. *)
   module To_string_buffers_state =
     To_monad.Arity1 (String_buffers.State) (String_buffers_state_transformation)
 
-  (** {5 An example with a custom monad} *)
   let%test_module "test transforms" =
     (module struct
       let left_nested_bind ~n ~bind_f =
