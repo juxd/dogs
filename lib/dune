@@ -2,5 +2,5 @@
  (name        dogs)
  (libraries   base travesty)
  (inline_tests)
- (preprocess (pps ppx_jane))
+ (preprocess (pps ppx_sexp_conv))
  (synopsis "more functional data abstractions"))

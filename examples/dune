@@ -2,5 +2,10 @@
  (name        dogs_tests)
  (libraries   base travesty dogs)
  (inline_tests)
- (preprocess (pps ppx_jane))
+ (preprocess
+  (pps
+    ppx_expect
+    ppx_fields_conv
+    ppx_let
+    ppx_sexp_conv))
  (synopsis "tests for dogs"))
